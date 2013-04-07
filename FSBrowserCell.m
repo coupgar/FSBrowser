@@ -21,6 +21,9 @@
 #define CHECKBOX_WIDTH 17.0
 
 @implementation FSBrowserCell
+
+#pragma mark -
+#pragma mark Memory related
 - (id)init {
     self = [super init];
     [self setLineBreakMode:NSLineBreakByTruncatingTail];
@@ -28,6 +31,16 @@
     [self setAllowsMixedState:YES];
     return self;
 }
+
+- (void)dealloc
+{
+  [_fileIcon release];
+  [super dealloc];
+}
+
+
+#pragma mark -
+#pragma mark Real magic
 - (NSUInteger)hitTestForEvent:(NSEvent *)event inRect:(NSRect)cellFrame ofView:(NSView *)controlView {
     NSPoint point = [controlView convertPoint:[event locationInWindow] fromView:nil];
     NSRect checkboxRect = NSMakeRect(cellFrame.origin.x, cellFrame.origin.y, CHECKBOX_WIDTH, cellFrame.size.height);
@@ -38,4 +51,27 @@
     }
     return ret;
 }
+
+- (NSRect)drawTitle:(NSAttributedString*)title withFrame:(NSRect)frame inView:(NSView*)controlView
+{
+  NSImage * image = nil;
+  image = _fileIcon;
+  NSRect rect = NSMakeRect(frame.origin.x, frame.origin.y, frame.size.height, frame.size.height);
+  [image drawInRect:rect fromRect:NSZeroRect operation:NSCompositeSourceOver fraction:1.0f respectFlipped:YES hints:nil];
+
+  NSRect titleFrame = NSMakeRect(frame.origin.x + 5.0f + frame.size.height, frame.origin.y, frame.size.width - (5.0 + frame.size.height), frame.size.height);
+  
+  [super drawTitle:title withFrame:titleFrame inView:controlView];
+  
+  return frame;
+
+}
+
+- (void)setFileIcon:(NSImage *)icon
+{
+  _fileIcon = [icon retain];
+}
+
+
+
 @end

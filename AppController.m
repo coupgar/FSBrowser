@@ -52,5 +52,6 @@
     FSNode *node = [browser itemAtIndexPath:indexPath];
     [cell setTitle:[node displayName]];
     [cell setState:[node state]];
+    [cell setFileIcon:[[NSWorkspace sharedWorkspace] iconForFile:node.path]];
 }
 @end

@@ -19,6 +19,10 @@
 #import <Cocoa/Cocoa.h>
 
 @interface FSBrowserCell : NSButtonCell {
+    NSImage * _fileIcon;
 
 }
+
+- (void)setFileIcon:(NSImage *)icon;
+
 @end
